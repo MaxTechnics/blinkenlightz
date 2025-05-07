@@ -1,0 +1,52 @@
+/* @import "tailwindcss"; */
+/* @import "xp.css"; */
+@import "7.css";
+
+@font-face {
+	font-family: "Segoe UI";
+	src: url(./font/segoeui.ttf) format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Segoe UI";
+	src: url(./font/segoeuib.ttf) format("truetype");
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Segoe UI";
+	src: url(./font/segoeuii.ttf) format("truetype");
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "Segoe UI";
+	src: url(./font/segoeuiz.ttf) format("truetype");
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "Segoe UI";
+	src: url(./font/seguisb.ttf) format("truetype");
+	font-weight: 600;
+	font-style: normal;
+}
+
+html {
+	/* background-color: #c0c0c0; */
+	background-color: transparent;
+	height: 100%;
+}
+
+body,
+.app-mount {
+	height: 100%;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Segoe UI";
+}
