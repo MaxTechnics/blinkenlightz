@@ -51,7 +51,7 @@
                         <!-- <div class="button_container"> -->
                         <section class="field-row" style="justify-content: flex-end">
                             <button @click="cClear(1, 1)">Quit</button>
-                            <button @click="cPlay(1, 1, true, 'CG1080i50')">Initialize Jingles</button>
+                            <button @click="testplay">Initialize Jingles</button>
                             <button  class="default">Load all</button>
                             <StartBtn>Start</StartBtn>
                         </section>
@@ -128,39 +128,14 @@ bsChannel.on('broadcast', {
     console.log('Event acknowledged');
 })
 
- const cPlay = async (chan, layr, loop, file) => {
-    // if (!clients.ccg) return {
-    //     error: 'Missing CCG client',
-    //     data: null
-    // }
 
+const testplay = () => {
+    window.casparAPI.play(1, 1, true, 'go1080p25')
+}
 
-    console.log('cplay', caspar)
-
-    const { error } = await caspar.play({
-        channel: chan,
-        layer: layr,
-        loop,
-        clip: file
-    });
-
-    if (error) console.error('casg', 'cPlay failed', error);
-};
-
- const cClear = async (chan, layr) => {
-    // if (!clients.ccg) return {
-    //     error: 'Missing CCG client',
-    //     data: null
-    // }
-
-    const { error } = await caspar.clear({
-        channel: chan,
-        layer: layr
-    });
-
-    if (error) console.error('casg', 'cClear failed', error);
-};  
-
+const clear = () => {
+    window.casparAPI.clear(1, 1)
+}
 
 // Debug view  
 const selectedItem = ref(null);
