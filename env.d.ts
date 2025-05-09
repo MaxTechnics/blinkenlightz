@@ -4,6 +4,7 @@
 interface ImportMetaEnv {
     readonly VITE_APP_SUPABASE_URL: string;
     readonly VITE_APP_SUPABASE_KEY: string;
+    readonly VITE_APP_CASP_CG_IP: string;
     // more env variables...
 }
 

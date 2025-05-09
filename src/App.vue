@@ -50,9 +50,9 @@
                     <article v-if="activeTab === 'debug'" role="tabpanel" id="tab-B">
                         <!-- <div class="button_container"> -->
                         <section class="field-row" style="justify-content: flex-end">
-                            <button>Quit</button>
-                            <button>Initialize Jingles</button>
-                            <button class="default">Load all</button>
+                            <button @click="cClear(1, 1)">Quit</button>
+                            <button @click="cPlay(1, 1, true, 'CG1080i50')">Initialize Jingles</button>
+                            <button  class="default">Load all</button>
                             <StartBtn>Start</StartBtn>
                         </section>
                         <!-- </div> -->
@@ -92,10 +92,15 @@ import RealtimeLatency from './components/RealtimeLatency.vue';
 import { jingleActions } from './actions/audio';
 import spin from './images/breaking bad jesse we need to cook.gif';
 import Fragment from './components/Fragment.vue';
+// import {  initCaspar } from './utils/casper'
 
 const hasLoaded = ref(false);
 const activeTab = ref<'caspar' | 'lamp' | 'debug'>('debug');
 
+// const caspar = await initCaspar( )
+// console.error(caspar)
+
+const caspar = window.casparAPI
 const env = import.meta.env
 const supabase = createClient(env.VITE_APP_SUPABASE_URL, env.VITE_APP_SUPABASE_KEY)
 
@@ -123,14 +128,39 @@ bsChannel.on('broadcast', {
     console.log('Event acknowledged');
 })
 
-const sendjingle = async (id: string) => {
-    console.log('Dojingle', id)
-    bsChannel.send({
-        type: 'broadcast',
-        event: 'jingle_action',
-        payload: { action_id: id }
-    })
-}
+ const cPlay = async (chan, layr, loop, file) => {
+    // if (!clients.ccg) return {
+    //     error: 'Missing CCG client',
+    //     data: null
+    // }
+
+
+    console.log('cplay', caspar)
+
+    const { error } = await caspar.play({
+        channel: chan,
+        layer: layr,
+        loop,
+        clip: file
+    });
+
+    if (error) console.error('casg', 'cPlay failed', error);
+};
+
+ const cClear = async (chan, layr) => {
+    // if (!clients.ccg) return {
+    //     error: 'Missing CCG client',
+    //     data: null
+    // }
+
+    const { error } = await caspar.clear({
+        channel: chan,
+        layer: layr
+    });
+
+    if (error) console.error('casg', 'cClear failed', error);
+};  
+
 
 // Debug view  
 const selectedItem = ref(null);

@@ -43,6 +43,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
     "7.css": "^0.18.0",
+    "casparcg-connection": "^6.3.0",
     "electron-squirrel-startup": "^1.0.1",
     "howler": "^2.2.4",
     "install": "^0.13.0",
