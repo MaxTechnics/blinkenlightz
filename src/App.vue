@@ -50,9 +50,9 @@
                     <article v-if="activeTab === 'debug'" role="tabpanel" id="tab-B">
                         <!-- <div class="button_container"> -->
                         <section class="field-row" style="justify-content: flex-end">
-                            <button @click="cClear(1, 1)">Quit</button>
+                            <button @click="ccgclear">Quit</button>
                             <button @click="testplay">Initialize Jingles</button>
-                            <button  class="default">Load all</button>
+                            <button class="default">Load all</button>
                             <StartBtn>Start</StartBtn>
                         </section>
                         <!-- </div> -->
@@ -133,7 +133,7 @@ const testplay = () => {
     window.casparAPI.play(1, 1, true, 'go1080p25')
 }
 
-const clear = () => {
+const ccgclear = () => {
     window.casparAPI.clear(1, 1)
 }
 
