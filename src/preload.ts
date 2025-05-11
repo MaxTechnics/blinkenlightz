@@ -3,43 +3,64 @@
 
 import { contextBridge } from "electron";
 import { CasparCG } from "casparcg-connection";
+import type { BlinkenCasparClearParams, BlinkenCasparPlayParams } from "../env";
 
 const config_the_sane_variable_of_doom = import.meta.env
-console.log(config_the_sane_variable_of_doom)
+console.log(config_the_sane_variable_of_doom);
 
-if (!config_the_sane_variable_of_doom.VITE_APP_CASP_CG_IP) console.error('Missing configuration')
+let ccg_client: CasparCG | undefined = undefined;
+
+const initialize = async () => {
+    if (!config_the_sane_variable_of_doom.VITE_APP_CASP_CG_IP) {
+        console.error('CCG Link Missing configuration')
+        return {
+            success: false,
+            error: 'Missing CCG Link configuration'
+        }
+    }
 
     console.log('casg', 'Initializing CasparCG connection...');
-    const ccg_client = new CasparCG({
+    ccg_client = new CasparCG({
         host: config_the_sane_variable_of_doom.VITE_APP_CASP_CG_IP
     });
-try {
-    ccg_client.connect();
 
-    const client_ready_promise = () => (new Promise<void>((resolve) => {
-        if (ccg_client.connected) return resolve();
-        console.warn('casg', 'Waiting for CasparCG connection...');
-        const int = setInterval(() => {
-            if (ccg_client.connected) {
-                clearInterval(int);
-                return resolve();
-            };
-            console.warn('casg', 'Still waiting for CasparCG connection...');
-        }, 100);
-    }));
+    try {
+        ccg_client.connect();
 
-    client_ready_promise().then(() => {
+        const client_ready_promise = () => (new Promise<void>((resolve) => {
+            if (ccg_client.connected) return resolve();
+            console.warn('casg', 'Waiting for CasparCG connection...');
+            const int = setInterval(() => {
+                if (ccg_client.connected) {
+                    clearInterval(int);
+                    return resolve();
+                }
+                console.warn('casg', 'Still waiting for CasparCG connection...');
+            }, 100);
+        }));
+
+        await client_ready_promise();
         console.log('casg', 'Initialized Caspar client, so uh vijeo games?');
-    });
-    
-} catch (pokemon) {
-    console.error('casg', pokemon);
+        return {
+            success: true,
+            error: null
+        }
+
+    } catch (pokemon) {
+        console.error('casg', pokemon);
+        return {
+            success: false,
+            error: 'Failed to connect to CasparCG'
+        }
+    }
 }
-const cPlay = async (chan, layr, loop, file) => {
-    // if (!clients.ccg) return {
-    //     error: 'Missing CCG client',
-    //     data: null
-    // }
+
+const cPlay = async (params: BlinkenCasparPlayParams) => {
+    const { channel: chan, layer: layr, loop, clip: file } = params;
+    if (!ccg_client) return {
+        success: false,
+        error: 'Missing CCG client'
+    }
 
     console.log('cplay args', chan, layr, loop, file)
 
@@ -52,14 +73,26 @@ const cPlay = async (chan, layr, loop, file) => {
         clip: file
     });
 
-    if (error) console.error('casg', 'cPlay failed', error);
+    if (error) {
+        console.error('casg', 'cPlay failed', error);
+        return {
+            success: false,
+            error: 'Failed to play'
+        }
+    }
+
+    return {
+        success: true,
+        error: null
+    }
 };
 
- const cClear = async (chan, layr) => {
-    // if (!clients.ccg) return {
-    //     error: 'Missing CCG client',
-    //     data: null
-    // }
+const cClear = async (params: BlinkenCasparClearParams) => {
+    const { chan, layr } = params;
+    if (!ccg_client) return {
+        success: false,
+        error: 'Missing CCG client'
+    }
 
     console.log('cclear args', chan, layr)
 
@@ -68,11 +101,23 @@ const cPlay = async (chan, layr, loop, file) => {
         layer: layr
     });
 
-    if (error) console.error('casg', 'cClear failed', error);
-};  
+    if (error) {
+        console.error('casg', 'cClear failed', error);
+        return {
+            success: false,
+            error: 'Failed to clear'
+        }
+    }
+
+    return {
+        success: true,
+        error: null
+    }
+};
 
 contextBridge.exposeInMainWorld('casparAPI', {
-    play: (...opts) => cPlay(...opts),
-    clear: (...opts) => cClear(...opts),
+    init: async () => initialize(),
+    play: async (params: BlinkenCasparPlayParams) => cPlay(params),
+    clear: async (params: BlinkenCasparClearParams) => cClear(params),
     isConnected: () => ccg_client.connected
 });
