@@ -1,7 +1,7 @@
 <template>
     <Error v-if="isError !== ''">{{ isError }}</Error>
     <main v-else class="window glass active" style="box-sizing: border-box; height: 100%; --window-background-color: #15a600;">
-        <Fragment class="conto" v-if="!hasLoaded">
+        <Fragment v-if="!hasLoaded">
             <div class="title-bar" style="-webkit-app-region: drag">
                 <div class="title-bar-text">The fucking app loads</div>
             </div>
@@ -17,8 +17,8 @@
 
         <Fragment v-else>
             <!-- <div class="cont" v-else> -->
-            <div class="title-bar" style="-webkit-app-region: drag;">
-                <div class="title-bar-text">Blinkenlightz</div>
+            <div class="title-bar">
+                <div class="title-bar-text" style="-webkit-app-region: drag;">Blinkenlightz</div>
                 <div class="title-bar-controls">
                     <button aria-label="Minimize"></button>
                     <button aria-label="Restore"></button>
@@ -162,6 +162,13 @@ onErrorCaptured((err: any) => {
 </script>
 
 <style lang="scss" scoped>
+.title-bar-text {
+    width: -webkit-fill-available;
+    height: inherit;
+    display: flex;
+    align-items: center;
+}
+
 .window {
     display: flex;
     flex-direction: column;
