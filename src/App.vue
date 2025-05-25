@@ -39,8 +39,8 @@
 
                     <article v-if="activeTab === 'lamp'" role="tabpanel" id="tab-A">
                         <div class="actions_view">
-                            <p>hi</p>
-                            <fieldset v-for="(group, groupName) in jingleActions" :key="groupName">
+                            <p>Dag beste kijker</p>
+                            <!-- <fieldset v-for="(group, groupName) in jingleActions" :key="groupName">
                                 <legend>{{ groupName }}</legend>
                                 <button @click="sendjingle(action.id)" v-for="action in group" :key="action.id">{{ action.name }}</button>
                             </fieldset>
