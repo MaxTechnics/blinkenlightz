@@ -43,6 +43,25 @@
                             <!-- <fieldset v-for="(group, groupName) in jingleActions" :key="groupName">
                                 <legend>{{ groupName }}</legend>
                                 <button @click="sendjingle(action.id)" v-for="action in group" :key="action.id">{{ action.name }}</button>
+                            </fieldset> -->
+                            <fieldset>
+                                <legend>Casper</legend>
+                                <button>Generiek</button>
+                                <button>Reportage 1</button>
+                                <button>Reportage 2</button>
+                                <button>Reportage 3</button>
+                                <button>Reportage 4</button>
+                                <button>weerkaart</button>
+                                <button>Outroview</button>
+                                <button>Eindgeneriek</button>
+                                <button>Blank</button>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Light</legend>
+                                <button>Startshot</button>
+                                <button>Intro effect</button>
+                                <button>Blackout</button>
                             </fieldset>
                         </div>
                     </article>
