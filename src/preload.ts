@@ -3,7 +3,7 @@
 
 import { contextBridge } from "electron";
 import { CasparCG } from "casparcg-connection";
-import type { BlinkenCasparClearParams, BlinkenCasparPlayParams } from "../env";
+import type { BlinkenCasparClearParams, BlinkenCasparLoadParams, BlinkenCasparPlayParams } from "../env";
 
 const config_the_sane_variable_of_doom = import.meta.env
 console.log(config_the_sane_variable_of_doom);
@@ -54,6 +54,37 @@ const initialize = async () => {
         }
     }
 }
+
+const cLoad = async (params: BlinkenCasparLoadParams) => {
+    const { channel: chan, layer: layr, clip: file } = params;
+    if (!ccg_client) return {
+        success: false,
+        error: 'Missing CCG client'
+    }
+
+    console.log('cload args', chan, layr, file)
+
+    console.log('cload', ccg_client)
+
+    const { error } = await ccg_client.load({
+        channel: chan,
+        layer: layr,
+        clip: file
+    });
+
+    if (error) {
+        console.error('casg', 'cLoad failed', error);
+        return {
+            success: false,
+            error: 'Failed to load'
+        }
+    }
+
+    return {
+        success: true,
+        error: null
+    }
+};
 
 const cPlay = async (params: BlinkenCasparPlayParams) => {
     const { channel: chan, layer: layr, loop, clip: file } = params;
@@ -119,5 +150,7 @@ contextBridge.exposeInMainWorld('casparAPI', {
     init: async () => initialize(),
     play: async (params: BlinkenCasparPlayParams) => cPlay(params),
     clear: async (params: BlinkenCasparClearParams) => cClear(params),
-    isConnected: () => ccg_client.connected
+    load: async (params: BlinkenCasparLoadParams) => cLoad(params),
+    isConnected: () => ccg_client.connected,
+    ccg_client
 });

@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="vite/client" />
 
+import { type CasparCG } from "casparcg-connection";
+
 interface ImportMetaEnv {
     readonly VITE_APP_SUPABASE_URL: string;
     readonly VITE_APP_SUPABASE_KEY: string;
@@ -21,6 +23,12 @@ export interface BlinkenCasparPlayParams {
     channel: number;
     layer: number;
     loop: boolean;
+    clip?: string;
+}
+
+export interface BlinkenCasparLoadParams {
+    channel: number;
+    layer: number;
     clip: string;
 }
 
@@ -30,7 +38,9 @@ declare global {
             init: () => Promise<{ success: true, error: null } | { success: false, error: string }>;
             play: (params: BlinkenCasparPlayParams) => Promise<{ success: true, error: null } | { success: false, error: string }>;
             clear: (params: BlinkenCasparClearParams) => Promise<{ success: true, error: null } | { success: false, error: string }>;
+            load: (params: BlinkenCasparLoadParams) => Promise<{ success: true, error: null } | { success: false, error: string }>;
             isConnected: () => boolean;
+            ccg_client: CasparCG
         };
     }
 }
