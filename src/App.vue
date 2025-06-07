@@ -40,7 +40,7 @@
                     <article v-if="activeTab === 'lamp'" role="tabpanel" id="tab-A">
                         <div class="actions_view">
                             <p>Dag beste kijker</p>
-                            <!-- <fieldset v-for="(group, groupName) in jingleActions" :key="groupName">
+                            <fieldset v-for="(group, groupName) in lampAction" :key="groupName">
                                 <legend>{{ groupName }}</legend>
                                 <button @click="socket.send(action.id)" v-for="action in group" :key="action.id">{{ action.name }}</button>
                             </fieldset>
@@ -113,6 +113,7 @@ import RealtimeLatency from './components/RealtimeLatency.vue';
 import { jingleActions } from './actions/audio';
 import spin from './images/breaking bad jesse we need to cook.gif';
 import Fragment from './components/Fragment.vue';
+import { lampAction } from './actions/lampies';
 import { handleCasparCommdand } from './lib/casparhandler';
 // import {  initCaspar } from './utils/casper'
 
