@@ -42,8 +42,8 @@
                             <p>Dag beste kijker</p>
                             <!-- <fieldset v-for="(group, groupName) in jingleActions" :key="groupName">
                                 <legend>{{ groupName }}</legend>
-                                <button @click="sendjingle(action.id)" v-for="action in group" :key="action.id">{{ action.name }}</button>
-                            </fieldset> -->
+                                <button @click="socket.send(action.id)" v-for="action in group" :key="action.id">{{ action.name }}</button>
+                            </fieldset>
                             <fieldset>
                                 <legend>Casper</legend>
                                 <button>Generiek</button>
@@ -55,6 +55,8 @@
                                 <button>Outroview</button>
                                 <button>Eindgeneriek</button>
                                 <button>Blank</button>
+                                <button @click="dobg">bg</button>
+                                <button @click="preintro">preintor</button>
                             </fieldset>
 
                             <fieldset>
@@ -111,6 +113,7 @@ import RealtimeLatency from './components/RealtimeLatency.vue';
 import { jingleActions } from './actions/audio';
 import spin from './images/breaking bad jesse we need to cook.gif';
 import Fragment from './components/Fragment.vue';
+import { handleCasparCommdand } from './lib/casparhandler';
 // import {  initCaspar } from './utils/casper'
 
 const hasLoaded = ref(false);
@@ -140,13 +143,53 @@ socket.onopen = () => {
     socket.send('Fuck you')
 }
 
+const dobg = ()  => {
+    window.casparAPI.play({
+        channel: 1,
+        layer: 1,
+        loop: false,
+        clip: 'studio-1.png'
+    })
+}
 
 bsChannel.on('broadcast', {
     event: 'acknowledge'
 }, () => {
     console.log('Event acknowledged');
 })
+.on('broadcast', { event: 'blinken_action_light'}, async ({payload}) => {
+    console.log('Got blinken light message', payload);
 
+    // latest message
+    // ack as well
+    socket.send(payload.action_id)
+})
+.on('broadcast', { event: 'blinken_action_video'}, async ({payload}) => {
+    console.log('Got blinken video message', payload);
+
+    // latest message
+    // ack as well
+    // socket.send(payload.action_id)
+    // window.casparAPI.play({
+    //     channel: 1,
+    //     layer: 8,
+    //     loop: false,
+    //     clip: payload.action_id // this all needs to be improved but eh
+    // })
+
+    handleCasparCommdand(payload.action)
+})
+
+const preintro = () => {
+    window.casparAPI.play({
+        channel: 1,
+        layer: 8,
+        loop: false,
+        clip: 'drd_preintro_alpha_v4'
+    })
+
+    
+}
 
 const testplay = () => {
     window.casparAPI.play(1, 1, true, 'go1080p25')
